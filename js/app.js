@@ -6,23 +6,39 @@ const state = {
   cart: null,
 };
 
+// pass in an array (cart item); ! new cart([CartItem, CartItem, CartItem])
+// new CartItem ('bag', 4) returns an object {product: 'bag,' quantity: 4} - this is what the constructor dictates
+// Cart will take an array ([{product: 'bag', quantity: 4}, {product: 'banana', quantity: 2}])
+
 // Cart constructor.
-const Cart = function(items) {
+const Cart = function(items) { // creating variable Cart holding function but it's the same thing, written differently. Cart constructor takes in items parameter, setting this items equal to items. when you have a new cart you need to pass in something for items. watch for capitalization, CartItem (another constructor that has properties for product and quantity below). 
   // this.items is an array of CartItem instances.
   this.items = items;
 };
 
 Cart.prototype.addItem = function(product, quantity) {
-  // TODO: Fill in this instance method to create a new CartItem and add it to this.items
+  // DONE TODO: Fill in this instance method to create a new CartItem and add it to this.items // then go back to local storage when this is done.
+  let newItem = new CartItem(product, quantity); // this is the new cart instance, so how to we add it. 
+  this.items.push(newItem);
 };
 
 Cart.prototype.saveToLocalStorage = function() {
-  // TODO: Fill in this instance method to save the contents of the cart to localStorage
+  // Done TODO: Fill in this instance method to save the contents of the cart to localStorage
+  let stringifiedItems = JSON.stringify(this.items);
+  // console.log('Stringified Items >>>  stringifiedItems');
+  localStorage.setItem('myItems', stringifiedItems);
+
+  let retrievedItems = localStorage.getItem('myItems');
+  // console.log('Items from local storage >>', retrievedItems);
+
+  let parsedItems = JSON.parse(retrievedItems);
+  // console.log('Parsed Items >> ', parsedItems);
 };
 
 Cart.prototype.removeItem = function(item) {
   // TODO: Fill in this instance method to remove one item from the cart.
   // Note: You will have to decide what kind of parameter to pass in here!
+  this.items.splice(item, 1);
 };
 
 Cart.prototype.updateCounter = function() {
@@ -61,6 +77,7 @@ function generateCatalog() {
   let waterCan = new Product('assets/water-can.jpg', 'Water Can');
   let wineGlass = new Product('assets/wine-glass.jpg', 'Wine Glass');
   state.allProducts.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
+  // all products is line 14 on catalog.js
 }
 
 // Initialize the app by creating the big list of products with images and names
